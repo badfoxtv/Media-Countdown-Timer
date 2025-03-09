@@ -5,14 +5,13 @@ manualSelectedMediaSourceName = ""
 textSourceName = ""
 
 last_text = ""
--- Значения по умолчанию
-DEFAULT_COLOR = 0x11FF21  -- Зеленый
-WARNING_COLOR = 0x00A5FF  -- Оранжевый
-CRITICAL_COLOR = 0x0000FF -- Красный
-DEFAULT_WARNING_TIME = 1   -- Время для оранжевого (минуты)
-DEFAULT_CRITICAL_TIME = 30 -- Время для красного (секунды)
+DEFAULT_COLOR = 0x11FF21
+WARNING_COLOR = 0x00A5FF
+CRITICAL_COLOR = 0x0000FF
+DEFAULT_WARNING_TIME = 1
+DEFAULT_CRITICAL_TIME = 30
 
--- Переменные для настроек
+
 color_default = DEFAULT_COLOR
 color_warning = WARNING_COLOR
 color_critical = CRITICAL_COLOR
@@ -45,11 +44,10 @@ function timer_callback()
         return
     end
 
-    -- Перевод настроек в миллисекунды
     local time_warning = time_warning_minutes * 60000
     local time_critical = time_critical_seconds * 1000
 
-    -- Выбор цвета на основе оставшегося времени
+
     local color = color_default
     if timeLeft <= time_warning then
         color = color_warning
@@ -194,12 +192,12 @@ function script_properties()
     local mediaSourceList = obs.obs_properties_add_list(props, "mediaSource", "Selected media source", obs.OBS_COMBO_TYPE_EDITABLE, obs.OBS_COMBO_FORMAT_STRING)
     obs.obs_property_list_add_string(mediaSourceList, "---AUTO---", "auto")
 
-      -- Добавляем настройки цветов
+
       obs.obs_properties_add_color(props, "color_default", "Default Color")
       obs.obs_properties_add_color(props, "color_warning", "Warning Color")
       obs.obs_properties_add_color(props, "color_critical", "Critical Color")
   
-      -- Добавляем настройки времени смены цвета (Warning - минуты, Critical - секунды)
+
       obs.obs_properties_add_int(props, "time_warning_minutes", "Warning Time (min)", 0, 10, 1)
       obs.obs_properties_add_int(props, "time_critical_seconds", "Critical Time (sec)", 0, 600, 1)
   
@@ -224,7 +222,6 @@ function script_update(settings)
     textSourceName = obs.obs_data_get_string(settings, "source")
     manualSelectedMediaSourceName = obs.obs_data_get_string(settings, "mediaSource")
 
-    -- Получение пользовательских цветов (или установка значений по умолчанию)
     color_default = obs.obs_data_get_int(settings, "color_default")
     if color_default == 0 then color_default = DEFAULT_COLOR end
 
@@ -234,7 +231,7 @@ function script_update(settings)
     color_critical = obs.obs_data_get_int(settings, "color_critical")
     if color_critical == 0 then color_critical = CRITICAL_COLOR end
 
-    -- Получение пользовательского времени смены цвета (или установка значений по умолчанию)
+
     time_warning_minutes = obs.obs_data_get_int(settings, "time_warning_minutes")
     if time_warning_minutes == 0 then time_warning_minutes = DEFAULT_WARNING_TIME end
 
@@ -245,7 +242,7 @@ function script_update(settings)
 end
 
 function script_defaults(settings)
-    -- Устанавливаем значения по умолчанию при первом запуске
+    
     obs.obs_data_set_default_int(settings, "color_default", DEFAULT_COLOR)
     obs.obs_data_set_default_int(settings, "color_warning", WARNING_COLOR)
     obs.obs_data_set_default_int(settings, "color_critical", CRITICAL_COLOR)
